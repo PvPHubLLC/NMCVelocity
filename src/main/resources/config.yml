@@ -1,0 +1,55 @@
+# The server to check
+server-ip: "pvphub.me"
+
+# What method should we use to determine if a user has voted?
+#
+#  "SYNC" - Sync and cache all likes for this server. We will look in
+#           the array of users who have liked to determine if someone
+#           has liked the server. (Automatic, slower)
+#
+#  "SINGLE" - A player must execute the "/namemc liked" command to
+#             check if they have liked the server. (Manual, faster)
+#
+method: SYNC
+
+sync-settings:
+  # How often should we refresh the list of users who have liked? (Milliseconds)
+  refresh-period: 30000
+
+single-settings:
+  # We're making a GET request (async) each time the command is executed, we should
+  # probably rate limit the user to make sure they can't spam web requests (Milliseconds)
+  command-cooldown: 30000
+  cooldown-message: "&cPlease wait 30s before checking again!"
+
+# How should we store if we've already rewarded players for liking the server?
+#
+#  "YAML" - Create a data file to store a list of UUIDs that we have already rewarded.
+#
+#  "LP_PERMISSION" - Give player who have been rewarded a permission node.
+#
+#  "LP_META" - Use LuckPerms meta to store if a single user has already been rewarded.
+#
+storage: YAML
+
+messages:
+  already-verified: "&cYou've already liked our NameMC page and received a reward!"
+  not-verified: "&cWe checked and you're not verified! Please try again soon."
+  link:
+    - " &7»&m            &c 🔥 &7&m            &r&7«"
+    - ""
+    - "            &c&lNameMC"
+    - ""
+    - "    &7Like our NameMC page"
+    - "    &7for in-game rewards!"
+    - ""
+    - " &7»&m            &c 🔥 &7&m            &r&7«"
+  # Broadcast to announce once a player likes the server
+  broadcast:
+    - "&b%player%&7 liked our server on namemc and got a reward."
+    - "&7Run /namemc to do the same."
+
+# More reward options coming soon, only proxy commands for now
+rewards:
+  commands:
+    - "lpv user %player% permission set essentials.nickname true"
